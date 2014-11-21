@@ -29,7 +29,7 @@
             <div class="todoItems">
                 <ul>
                     <li ng-repeat="todo in todoList track by $index">
-                        <input type="checkbox" name="todo-check" value="todo-in-group" ng-model="todo.isSelect">
+                        <input type="checkbox" name="todo-check" onclick="OnChangeCheckbox(this)" value="todo-in-group" ng-model="todo.isSelect">
                         <span ng-bind="$index+1"></span>
                         <span ng-bind="todo.name"></span>
                         <span ng-bind="todo.desc"></span>
@@ -101,13 +101,23 @@
 
                 }
 
-
             }
+
+    );
+
+    function OnChangeCheckbox(checkbox) {
+        if (checkbox.checked) {
+            alert ("The check box is checked.");
+        }
+        else {
+            alert ("The check box is not checked.");
+        }
+    }
 
 /*todo : Find the event fir check/uncheck
  todo : Find angular event corresponding to that event
  todo : Find demo for that event
-  */  );
+  */
 
 </script>
 </html>
