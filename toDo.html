@@ -29,7 +29,7 @@
             <div class="todoItems">
                 <ul>
                     <li ng-repeat="todo in todoList track by $index">
-                        <input type="checkbox" name="todo-check" onclick="OnChangeCheckbox(this)" value="todo-in-group" ng-model="todo.isSelect">
+                        <input type="checkbox" name="todo-check" ng-click="OnChangeCheckbox($index)" value="todo-in-group" ng-model="todo.isSelect">
                         <span ng-bind="$index+1"></span>
                         <span ng-bind="todo.name"></span>
                         <span ng-bind="todo.desc"></span>
@@ -49,8 +49,8 @@
                     <li ng-repeat="done in doneList track by $index">
                         <input type="checkbox" name="done-check" value="done-in-group" ng-model="done.isSelect">
                         <span ng-bind="$index+1"></span>
-                        <span  ng-bind="done.name"></span>
-                        <span  ng-bind="done.desc"></span>
+                        <span ng-bind="done.name"></span>
+                        <span ng-bind="done.desc"></span>
                         <button ng-click="removeTask($index)">Remove</button>
                     </li>
                 </ul>
@@ -67,8 +67,9 @@
             $scope.todoList = [];
         }
         $scope.insertTask = function () {
-            $scope.todoList.push({name: $scope.newTask,desc: $scope.newDesc});
+            $scope.todoList.push({name: $scope.newTask, desc: $scope.newDesc, isSelect:false });
             $scope.newTask = "";
+            $scope.newDesc = "";
             localStorage.setItem('todoList', JSON.stringify($scope.todoList));
         };
         $scope.doneList = JSON.parse(localStorage.getItem('doneList'));
@@ -84,17 +85,23 @@
             $scope.doneList.splice(index, 1);
             localStorage.setItem('doneList', JSON.stringify($scope.doneList));
         };
+        $scope.OnChangeCheckbox = function(index) {
+            alert($scope.todoList[index].name);
+            alert(JSON.stringify($scope.todoList[index]) + "The check box is not checked.");
+        }
+
+
     });
 
     todoModule.directive("ngEnter", function () {
                 return{
                     link: function (scope, element) {
                         element.bind("keypress", function (event) {
-                        if (event.keyCode == 13) {
-                            scope.insertTask();
-                            scope.$digest();
+                            if (event.keyCode == 13) {
+                                scope.insertTask();
+                                scope.$digest();
 
-                        }
+                            }
                         });
 
                     }
@@ -102,22 +109,12 @@
                 }
 
             }
-
     );
 
-    function OnChangeCheckbox(checkbox) {
-        if (checkbox.checked) {
-            alert ("The check box is checked.");
-        }
-        else {
-            alert ("The check box is not checked.");
-        }
-    }
-
-/*todo : Find the event fir check/uncheck
- todo : Find angular event corresponding to that event
- todo : Find demo for that event
-  */
+    /*todo : Find the event fir check/uncheck
+     todo : Find angular event corresponding to that event
+     todo : Find demo for that event
+     */
 
 </script>
 </html>
