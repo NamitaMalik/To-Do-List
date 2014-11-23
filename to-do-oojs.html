@@ -58,9 +58,8 @@
 </div>
 </body>
 <script>
-    $( document ).ready(function() {
+    $(document).ready(function () {
         (function () {
-            var todoList = [];
             var elementName = document.getElementById("taskName");
             var elementDesc = document.getElementById("taskDesc");
 
@@ -71,7 +70,17 @@
             elementTaskList.innerHTML = "";
 
             elementAdd.onclick = addTask;
+            var todoList = JSON.parse(localStorage.getItem('todoList'));
+            if (!todoList) {
+                todoList = [];
+            }
+            else {
+                for (var i = 0; i < todoList.length; i++) {
+                    addTaskHTML(todoList[i]);
+                }
+            }
             var elementDoneParent = jQuery("#taskList");
+
             function addTaskHTML(task) {
                 jQuery("#taskList").append(taskHTML.replace("{{index}}", task.index).replace("{{name}}", task.elementName).replace("{{description}}", task.elementDesc));
             }
@@ -88,8 +97,11 @@
                 addTaskHTML(newTask);
             }
 
-            elementDoneParent.on("click",".completeTask" ,function () {
+            elementDoneParent.on("click", ".completeTask", function () {
                 $(this).parent().remove();
+                console.log(123,todoList);
+                todoList.splice(index, 1);
+                localStorage.setItem('todoList', JSON.stringify(todoList));
             });
 
         })();

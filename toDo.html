@@ -77,7 +77,7 @@
             $scope.doneList = [];
         }
         $scope.completeTask = function (index) {
-            $scope.doneList.push($scope.todoList.splice(index, 1)[0]);
+            $scope.doneList.push($scope.todoList.splice(index, 1)[0]);//Since splice returns an array and we needed  to add the oth element to the done list that is why we had written [0].
             localStorage.setItem('todoList', JSON.stringify($scope.todoList));
             localStorage.setItem('doneList', JSON.stringify($scope.doneList));
         };
