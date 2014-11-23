@@ -31,7 +31,7 @@
                         <span>{{index}}</span>
                         <span>{{name}}</span>
                         <span>{{description}}</span>
-                        <button>Done</button>
+                        <button class="completeTask">Done</button>
                     </li>
                 </ul>
             </div>
@@ -58,45 +58,43 @@
 </div>
 </body>
 <script>
-    (function () {
-        var todoList = [];
-        var elementName = document.getElementById("taskName");
-        var elementDesc = document.getElementById("taskDesc");
+    $( document ).ready(function() {
+        (function () {
+            var todoList = [];
+            var elementName = document.getElementById("taskName");
+            var elementDesc = document.getElementById("taskDesc");
 
-        var elementAdd = document.getElementById("addTask");
+            var elementAdd = document.getElementById("addTask");
 
-        var elementTaskList = document.getElementById("taskList");
-        var taskHTML = elementTaskList.innerHTML;
-        elementTaskList.innerHTML = "";
+            var elementTaskList = document.getElementById("taskList");
+            var taskHTML = elementTaskList.innerHTML;
+            elementTaskList.innerHTML = "";
 
-        elementAdd.onclick = addTask;
+            elementAdd.onclick = addTask;
+            var elementDone = jQuery(".completeTask");
+            console.log(elementDone);
+            function addTaskHTML(task) {
+                jQuery("#taskList").append(taskHTML.replace("{{index}}", task.index).replace("{{name}}", task.elementName).replace("{{description}}", task.elementDesc));
+            }
 
-        function addTaskHTML(task) {
-            jQuery("#taskList").append(taskHTML.replace("{{index}}", task.index).replace("{{name}}", task.elementName).replace("{{description}}", task.elementDesc));
-        }
+            function addTask() {
+                var newTask = {};
+                newTask.index = todoList.length + 1;
+                newTask.elementName = elementName.value;
+                newTask.elementDesc = elementDesc.value;
+                todoList.push(newTask);
+                elementName.value = "";
+                elementDesc.value = "";
+                localStorage.setItem('todoList', JSON.stringify(todoList));
+                addTaskHTML(newTask);
+            }
 
-        function addTask() {
-            var newTask = {};
-            newTask.index = todoList.length +1;
-            newTask.elementName = elementName.value;
-            newTask.elementDesc = elementDesc.value;
-            todoList.push(newTask);
-            elementName.value = "";
-            elementDesc.value = "";
-            localStorage.setItem('todoList', JSON.stringify(todoList));
-            addTaskHTML(newTask);
-        }
+            elementDone.live("click", function () {
+                alert($(this).text());
+            });
 
-        var doneList = [];
+        })();
+    });
 
-
-
-
-
-
-
-
-
-    })();
 </script>
 </html>
