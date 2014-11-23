@@ -71,8 +71,7 @@
             elementTaskList.innerHTML = "";
 
             elementAdd.onclick = addTask;
-            var elementDone = jQuery(".completeTask");
-            console.log(elementDone);
+            var elementDoneParent = jQuery("#taskList");
             function addTaskHTML(task) {
                 jQuery("#taskList").append(taskHTML.replace("{{index}}", task.index).replace("{{name}}", task.elementName).replace("{{description}}", task.elementDesc));
             }
@@ -89,8 +88,8 @@
                 addTaskHTML(newTask);
             }
 
-            elementDone.live("click", function () {
-                alert($(this).text());
+            elementDoneParent.on("click",".completeTask" ,function () {
+                $(this).parent().remove();
             });
 
         })();
