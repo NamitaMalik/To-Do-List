@@ -43,13 +43,13 @@
         </div>
         <div id="right-content">
             <div class="removeItems">
-                <ul>
+                <ul id="doneList">
                     <li>
                         <input type="checkbox" name="done-check" value="done-in-group">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <button>Remove</button>
+                        <span>{{index}}</span>
+                        <span>{{name}}</span>
+                        <span>{{description}}</span>
+                        <button class="removeTask">Remove</button>
                     </li>
                 </ul>
             </div>
@@ -68,6 +68,12 @@
             var elementTaskList = document.getElementById("taskList");
             var taskHTML = elementTaskList.innerHTML;
             elementTaskList.innerHTML = "";
+            var elementDoneList = document.getElementById("doneList");
+            var doneHTML = elementDoneList.innerHTML;
+            elementDoneList.innerHTML = "";
+
+            var doneList=[];
+            var removeList =[];
 
             elementAdd.onclick = addTask;
             var todoList = JSON.parse(localStorage.getItem('todoList'));
@@ -76,15 +82,21 @@
             }
             else {
                 for (var i = 0; i < todoList.length; i++) {
-                    addTaskHTML(todoList[i]);
+                    todoList[i].index = i+1;
+                    addTaskHTML("#taskList",todoList[i]);
                 }
             }
             var elementDoneParent = jQuery("#taskList");
+            var elementRemoveParent = jQuery("#doneList");
 
-            function addTaskHTML(task) {
-                jQuery("#taskList").append(taskHTML.replace("{{index}}", task.index).replace("{{name}}", task.elementName).replace("{{description}}", task.elementDesc));
+            function addTaskHTML(id,task) {
+                jQuery(id).append(taskHTML.replace("{{index}}", task.index).replace("{{name}}", task.elementName).replace("{{description}}", task.elementDesc));
             }
 
+            /*function addDoneHTML(id,task) {
+                jQuery(id).append(doneHTML.replace("{{index}}", task.index).replace("{{name}}", task.elementName).replace("{{description}}", task.elementDesc));
+            }
+            */
             function addTask() {
                 var newTask = {};
                 newTask.index = todoList.length + 1;
@@ -94,16 +106,36 @@
                 elementName.value = "";
                 elementDesc.value = "";
                 localStorage.setItem('todoList', JSON.stringify(todoList));
-                addTaskHTML(newTask);
+                addTaskHTML("#taskList", newTask);
             }
 
             elementDoneParent.on("click", ".completeTask", function () {
-                $(this).parent().remove();
-                console.log(123,todoList);
-                todoList.splice(index, 1);
+                var index= $($($(this).parent()).children()[1]).text();
+               // todoList.splice(index-1, 1);
+                var doneItem = todoList.splice(index-1, 1)[0];
+                doneItem.index = doneList.length +1;
+                doneList.push(doneItem);
+                console.log(doneList[0]);
                 localStorage.setItem('todoList', JSON.stringify(todoList));
+                $($($(this).parent()).parent()).empty();
+                addTaskHTML("#doneList", doneItem);
+                for (var i = 0; i < todoList.length; i++) {
+                    todoList[i].index = i+1;
+                    addTaskHTML("#taskList",todoList[i]);
+                }
             });
 
+            elementRemoveParent.on("click", ".removeTask", function () {
+                console.log(abc);
+                var index= $($($(this).parent()).children()[1]).text();
+                doneList.splice(index-1,1);
+                $($($(this).parent()).parent()).empty();
+                addTaskHTML("#doneList", doneItem);
+                for (var i = 0; i < doneList.length; i++) {
+                    doneList[i].index = i+1;
+                    addTaskHTML("#doneList",doneList[i]);
+                }
+            });
         })();
     });
 
