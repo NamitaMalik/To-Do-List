@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript" src="./jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div>
+    <div class="header">
+        <div id="test">
+            <span id="heading">To Do App</span>
+        </div>
+        <div id="triangle">
+        </div>
+    </div>
+    <div class="left">
+        <div id="left-title">
+            <span>Things to Do</span>
+        </div>
+        <div id="left-content">
+            <div id="input-item">
+                <input type="text" id="taskName" placeholder="My to do items">
+                <input type="text" id="taskDesc" placeholder="My description">
+                <button id="addTask">Add</button>
+            </div>
+            <div class="todoItems">
+                <ul id="taskList">
+                    <li>
+                        <input type="checkbox" name="todo-check" value="todo-in-group">
+                        <span>{{index}}</span>
+                        <span>{{name}}</span>
+                        <span>{{description}}</span>
+                        <button>Done</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="right">
+        <div id="right-title">
+            <span>Things Done!</span>
+        </div>
+        <div id="right-content">
+            <div class="removeItems">
+                <ul>
+                    <li>
+                        <input type="checkbox" name="done-check" value="done-in-group">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <button>Remove</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    (function () {
+        var todoList = [];
+        var elementName = document.getElementById("taskName");
+        var elementDesc = document.getElementById("taskDesc");
+
+        var elementAdd = document.getElementById("addTask");
+
+        var elementTaskList = document.getElementById("taskList");
+        var taskHTML = elementTaskList.innerHTML;
+        elementTaskList.innerHTML = "";
+
+        elementAdd.onclick = addTask;
+
+        function addTaskHTML(task) {
+            jQuery("#taskList").append(taskHTML.replace("{{index}}", task.index).replace("{{name}}", task.elementName).replace("{{description}}", task.elementDesc));
+        }
+
+        function addTask() {
+            var newTask = {};
+            newTask.index = todoList.length +1;
+            newTask.elementName = elementName.value;
+            newTask.elementDesc = elementDesc.value;
+            todoList.push(newTask);
+            elementName.value = "";
+            elementDesc.value = "";
+            localStorage.setItem('todoList', JSON.stringify(todoList));
+            addTaskHTML(newTask);
+        }
+
+        var doneList = [];
+
+
+
+
+
+
+
+
+
+    })();
+</script>
+</html>
